@@ -6,7 +6,7 @@ function App() {
 
   const [list, setList] = useState([
     { id: 1, title: "영어", detail: "단어 10개 암기" },
-    { id: 2, title: "수학", detail: "삼각함수 풀기" },
+    { id: 2, title: "수학", detail: "구구단 외우기" },
   ]);
   const [checkedList, setCheckedList] = useState([
     { id: 1, title: "과학", detail: "주기율표 암기" },
@@ -29,11 +29,38 @@ function App() {
     };
     setList([...list, newList]);
     e.preventDefault();
+    setTitle("");
+    setDetail("");
   };
 
   const deleteList = (id) => {
     const updatedList = list.filter((value) => value.id !== id);
     setList(updatedList);
+  };
+
+  const deleteCheckedList = (id) => {
+    const updatedCheckedList = checkedList.filter((value) => value.id !== id);
+    setCheckedList(updatedCheckedList);
+  };
+
+  const doneList = (id, title, detail) => {
+    deleteList(id);
+    const newDoneList = {
+      id: checkedList.length + 1,
+      title,
+      detail,
+    };
+    setCheckedList([...checkedList, newDoneList]);
+  };
+
+  const workingList = (id, title, detail) => {
+    deleteCheckedList(id);
+    const newWorkingList = {
+      id: list.length + 1,
+      title,
+      detail,
+    };
+    setList([...list, newWorkingList]);
   };
 
   return (
@@ -53,6 +80,11 @@ function App() {
                 <br />
                 {value.detail}
                 <button onClick={() => deleteList(value.id)}>X</button>
+                <button
+                  onClick={() => doneList(value.id, value.title, value.detail)}
+                >
+                  완료
+                </button>
               </li>
             );
           })}
@@ -65,7 +97,14 @@ function App() {
                 {value.title}
                 <br />
                 {value.detail}
-                <button onClick={() => deleteList(value.id)}>X</button>
+                <button onClick={() => deleteCheckedList(value.id)}>X</button>
+                <button
+                  onClick={() =>
+                    workingList(value.id, value.title, value.detail)
+                  }
+                >
+                  진행중
+                </button>
               </li>
             );
           })}
