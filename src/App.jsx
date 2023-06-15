@@ -7,9 +7,11 @@ function App() {
 
   const [list, setList] = useState([
     { id: 1, title: "수학", detail: "구구단 외우기" },
+    { id: 2, title: "국어", detail: "받아쓰기" },
   ]);
   const [checkedList, setCheckedList] = useState([
-    { id: 1, title: "영어", detail: "단어외우기" },
+    { id: 1, title: "영어", detail: "단어 외우기" },
+    { id: 2, title: "과학", detail: "주기율표 외우기" },
   ]);
 
   const titleChangeHandler = (e) => {
@@ -28,24 +30,36 @@ function App() {
         detail,
       };
       setList([...list, newList]);
-      e.preventDefault();
-      setTitle("");
-      setDetail("");
     } else {
-      alert("제목과 내용을 입력해주세요");
+      alert("제목과 내용을 입력해주세요.");
     }
+    e.preventDefault(); // 폼 제출시 새로고침을 막음
+    setTitle(""); // Title, Detail 빈 값으로
+    setDetail("");
   };
 
+  // WorkingList 요소 삭제
   const deleteList = (id) => {
-    const updatedList = list.filter((value) => value.id !== id);
+    const updatedList = list
+      .filter((value) => value.id !== id) // value.id 가 일치하지 않는 리스트로 거름
+      .map((value, i) => {
+        // 업데이트된 리스트 id 각각의 값을 index + 1 로 갱신 (중복 피함)
+        return { ...value, id: i + 1 };
+      });
     setList(updatedList);
   };
 
+  // DoneList 요소 삭제
   const deleteCheckedList = (id) => {
-    const updatedCheckedList = checkedList.filter((value) => value.id !== id);
+    const updatedCheckedList = checkedList
+      .filter((value) => value.id !== id)
+      .map((value, i) => {
+        return { ...value, id: i + 1 };
+      });
     setCheckedList(updatedCheckedList);
   };
 
+  // doneList 로 이동
   const doneList = (id, title, detail) => {
     deleteList(id);
     const newDoneList = {
@@ -56,6 +70,7 @@ function App() {
     setCheckedList([...checkedList, newDoneList]);
   };
 
+  // workingList 로 이동
   const workingList = (id, title, detail) => {
     deleteCheckedList(id);
     const newWorkingList = {
