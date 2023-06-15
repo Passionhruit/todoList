@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
+import Item from "./components/Item.jsx";
+import CheckedItem from "./components/CheckedItem.jsx";
 
 function App() {
   const [title, setTitle] = useState("");
@@ -10,8 +12,8 @@ function App() {
     { id: 2, title: "국어", detail: "받아쓰기" },
   ]);
   const [checkedList, setCheckedList] = useState([
-    { id: 1, title: "영어", detail: "단어 외우기" },
-    { id: 2, title: "과학", detail: "주기율표 외우기" },
+    { id: 1, title: "영어", detail: "단어 10개 외우기" },
+    { id: 2, title: "화학", detail: "주기율표 외우기" },
   ]);
 
   const titleChangeHandler = (e) => {
@@ -86,64 +88,36 @@ function App() {
       <div className="divStyle">
         <h1>TO DO LIST</h1>
         <form>
-          <span className="spanStyle">
-            Title{"\u00A0"}
-            <input type="text" value={title} onChange={titleChangeHandler} />
-          </span>
-          <span className="spanStyle">
-            Detail{"\u00A0"}
-            <input type="text" value={detail} onChange={detailChangeHandler} />
-          </span>
+          <span className="spanStyle">Title{"\u00A0"} </span>
+          <input type="text" value={title} onChange={titleChangeHandler} />
+
+          <span className="spanStyle">Detail{"\u00A0"} </span>
+          <input type="text" value={detail} onChange={detailChangeHandler} />
+
           <button onClick={addList}>Add</button>
         </form>
         <div className="innderDivStyle">
           <ul className="ulStyle">
-            <h2>Working</h2>
+            <h2>✏️ Working</h2>
             {list.map((value) => {
               return (
-                <li key={value.id} className="listStyle">
-                  <h3 className="titleStyle">{value.title}</h3>
-                  <p className="detailStyle">{value.detail}</p>
-                  <button
-                    onClick={() => deleteList(value.id)}
-                    className="btnStyle"
-                  >
-                    X
-                  </button>
-                  <button
-                    onClick={() =>
-                      doneList(value.id, value.title, value.detail)
-                    }
-                    className="btnStyle"
-                  >
-                    완료
-                  </button>
-                </li>
+                <Item
+                  value={value}
+                  deleteList={deleteList}
+                  doneList={doneList}
+                />
               );
             })}
           </ul>
           <ul className="ulStyle">
-            <h2>Done</h2>
+            <h2>🎉 Done</h2>
             {checkedList.map((value) => {
               return (
-                <li key={value.id} className="listStyle">
-                  <h3 className="titleStyle">{value.title}</h3>
-                  <p className="detailStyle">{value.detail}</p>
-                  <button
-                    onClick={() => deleteCheckedList(value.id)}
-                    className="btnStyle"
-                  >
-                    X
-                  </button>
-                  <button
-                    onClick={() =>
-                      workingList(value.id, value.title, value.detail)
-                    }
-                    className="btnStyle"
-                  >
-                    진행중
-                  </button>
-                </li>
+                <CheckedItem
+                  value={value}
+                  deleteCheckedList={deleteCheckedList}
+                  workingList={workingList}
+                />
               );
             })}
           </ul>
